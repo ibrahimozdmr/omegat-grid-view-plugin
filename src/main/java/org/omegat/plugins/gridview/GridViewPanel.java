@@ -18,6 +18,7 @@ package org.omegat.plugins.gridview;
 
 import org.omegat.core.Core;
 import org.omegat.core.CoreEvents;
+import org.omegat.core.data.IProject;
 import org.omegat.core.data.SourceTextEntry;
 import org.omegat.core.events.IEntryEventListener;
 import org.omegat.core.events.IProjectEventListener;
@@ -92,6 +93,10 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
     private int fontSizeDelta;
     private boolean wrapEnabled = true;
     private int baseRowHeight;
+
+    /** Mirror the OmegaT editor, which shows one document at a time. */
+    private boolean showCurrentFileOnly = true;
+    private String currentFilePath;
 
     public GridViewPanel() {
         super(DOCK_KEY, "Grid View", true);
@@ -225,6 +230,7 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
         CoreEvents.registerEntryEventListener(new IEntryEventListener() {
             @Override
             public void onNewFile(String activeFileName) {
+                populateForFile(activeFileName);
             }
 
             @Override
@@ -249,6 +255,13 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
 
     @Override
     public void populatePaneMenu(JPopupMenu menu) {
+        JCheckBoxMenuItem currentFileItem =
+                new JCheckBoxMenuItem("Yalnızca açık dosyayı göster", showCurrentFileOnly);
+        currentFileItem.addActionListener(e -> {
+            showCurrentFileOnly = currentFileItem.isSelected();
+            populateFromProject();
+        });
+        menu.add(currentFileItem);
         JCheckBoxMenuItem wrapItem = new JCheckBoxMenuItem("Satır kaydırma", wrapEnabled);
         wrapItem.addActionListener(e -> {
             wrapEnabled = wrapItem.isSelected();
@@ -378,6 +391,7 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
             populateFromProject();
             break;
         case CLOSE:
+            currentFilePath = null;
             model.setEntries(Collections.emptyList());
             showNoProjectStatus();
             break;
@@ -393,7 +407,29 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
     }
 
     private void populateFromProject() {
-        model.setEntries(Core.getProject().getAllEntries());
+        // The editor may not have loaded a document yet right after project
+        // load; onNewFile will re-populate with the correct file when it does.
+        IEditor editor = Core.getEditor();
+        populateForFile(editor != null ? editor.getCurrentFile() : null);
+    }
+
+    /** Shows the given document's segments (or all, when configured so). */
+    private void populateForFile(String filePath) {
+        currentFilePath = filePath;
+        IProject project = Core.getProject();
+        if (project == null || !project.isProjectLoaded()) {
+            return;
+        }
+        if (showCurrentFileOnly && filePath != null) {
+            for (IProject.FileInfo fileInfo : project.getProjectFiles()) {
+                if (filePath.equals(fileInfo.filePath)) {
+                    model.setEntries(fileInfo.entries);
+                    updateStatusLabel();
+                    return;
+                }
+            }
+        }
+        model.setEntries(project.getAllEntries());
         updateStatusLabel();
     }
 
@@ -405,7 +441,9 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
         String counts = table.getRowCount() < model.getRowCount()
                 ? table.getRowCount() + " / " + model.getRowCount() + " segment"
                 : model.getRowCount() + " segment";
-        statusLabel.setText(counts
+        String filePrefix = showCurrentFileOnly && currentFilePath != null
+                ? currentFilePath + " — " : "";
+        statusLabel.setText(filePrefix + counts
                 + " — Hedef hücresini çift tıklayıp düzenleyebilirsiniz; Enter kaydeder.");
     }
 

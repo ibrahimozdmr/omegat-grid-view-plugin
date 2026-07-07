@@ -6,6 +6,8 @@ First release. Developed against OmegaT 6.0.0 API, tested on OmegaT 6.0.1.
 
 - Dockable Grid View panel with a lazy, read-through table model
   (segment number | source | target | status)
+- Shows the document open in the editor (switches automatically with the
+  editor via `onNewFile`); a gear-menu toggle switches to an all-files view
 - Editable target column: commits through OmegaT's editor API
   (`gotoEntry` → `replaceEditText` → `commitAndLeave`)
 - Two-way synchronization between the grid and the OmegaT editor

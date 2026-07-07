@@ -79,15 +79,16 @@ class GridViewTableModel extends AbstractTableModel {
     }
 
     /**
-     * Entry numbers are normally sequential (1..N) in getAllEntries() order,
-     * so try direct indexing first and fall back to a linear scan.
+     * Entry numbers are sequential in project order, and a single file's
+     * entries are a contiguous block of it, so try offset indexing from the
+     * first row and fall back to a linear scan.
      */
     int getRowForEntryNum(int entryNum) {
-        if (entryNum <= 0) {
+        if (entryNum <= 0 || entries.isEmpty()) {
             return -1;
         }
-        int guess = entryNum - 1;
-        if (guess < entries.size() && entries.get(guess).entryNum() == entryNum) {
+        int guess = entryNum - entries.get(0).entryNum();
+        if (guess >= 0 && guess < entries.size() && entries.get(guess).entryNum() == entryNum) {
             return guess;
         }
         for (int i = 0; i < entries.size(); i++) {

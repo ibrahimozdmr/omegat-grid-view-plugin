@@ -12,6 +12,8 @@ statistics and autosave behave exactly as if you had typed in the editor pane.
 
 - Dockable **Grid View** panel: segment number | source | target | status
   (translated / untranslated / active)
+- Shows the **document open in the editor** and follows file switches;
+  an all-files view is available from the gear menu
 - **Editable target column** — double-click a cell, type, press Enter;
   the change is committed through `IEditor` (gotoEntry → replaceEditText → commit)
 - **Two-way synchronization**: click a row to jump the editor to that segment;
@@ -76,6 +78,8 @@ istatistikler ve otomatik kayıt normal şekilde işler).
 
 - Yerleştirilebilir **Grid View** paneli: segment no | kaynak | hedef | durum
   (Çevrildi / Çevrilmedi / Aktif)
+- **Editörde açık belgeyi** gösterir, dosya geçişlerini otomatik izler;
+  dişli menüsünden tüm dosyaları birleşik gösterme seçeneği vardır
 - **Düzenlenebilir hedef sütunu** — hücreye çift tıkla, yaz, Enter'a bas
 - **Çift yönlü senkronizasyon**: satıra tıklayınca editör o segmente atlar;
   editörde segment değişince ızgara aktif satırı seçip görünür alana kaydırır

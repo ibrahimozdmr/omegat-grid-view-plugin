@@ -33,5 +33,6 @@ distributions {
 }
 
 val jar by tasks.getting(Jar::class) {
+    archiveBaseName.set("omegat-gridview-plugin")
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

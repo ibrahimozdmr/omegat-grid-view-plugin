@@ -1,1 +1,4 @@
-rootProject.name = "omegat-gridview-plugin"
+rootProject.name = "omegat-plugins"
+
+include("grid-view")
+include("reopen-last-project")

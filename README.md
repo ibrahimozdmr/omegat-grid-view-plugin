@@ -1,64 +1,34 @@
-# OmegaT Grid View Plugin
+# OmegaT Plugins
 
-A dockable two-column (source | target) grid view for [OmegaT](https://omegat.org),
-inspired by the grid editors of memoQ/Trados. The grid stays in sync with the
-OmegaT editor in both directions, and the target column is directly editable —
-all edits are committed through OmegaT's own editor API, so translation memory,
-statistics and autosave behave exactly as if you had typed in the editor pane.
+A collection of small [OmegaT](https://omegat.org) plugins. Each subfolder
+is an independent Gradle module producing its own JAR — install only the
+ones you want.
 
 *Türkçe açıklama aşağıdadır.*
 
-## Features
+## Plugins
 
-- Dockable **Grid View** panel: segment number | source | target | status
-  (translated / untranslated / active)
-- Shows the **document open in the editor** and follows file switches;
-  an all-files view is available from the gear menu
-- **Editable target column** — double-click a cell, type, press Enter;
-  the change is committed through `IEditor` (gotoEntry → replaceEditText → commit)
-- **Two-way synchronization**: click a row to jump the editor to that segment;
-  the grid follows the editor's active segment and scrolls it into view
-- **Search box and filter** (All / Untranslated / Translated) backed by
-  `TableRowSorter`, with live row updates as you translate
-- **Pane settings menu** (gear icon): word wrap on/off, font size adjustment;
-  the grid follows OmegaT's application font by default
-- Lazy table model over `IProject.getAllEntries()` — no per-segment copies,
-  scales to projects with tens of thousands of segments
-- On first install the panel appears as a collapsed auto-hide tab at the
-  bottom border; drag it wherever you like, the position is remembered
+- **[grid-view](grid-view/)** — dockable two-column (source | target) grid
+  view synchronized with the OmegaT editor, with an editable target column,
+  search/filter and word wrap.
+- **[reopen-last-project](reopen-last-project/)** — automatically reopens
+  the most recently used project on startup.
+
+See each subfolder's own README for details, installation instructions and
+known limitations.
 
 ## Requirements
 
 - OmegaT 6.0.x (developed and tested on 6.0.1)
 
-## Installation
-
-Copy `omegat-gridview-plugin-<version>.jar` into your OmegaT plugins folder:
-
-- Windows: `%APPDATA%\OmegaT\plugins`
-- Linux / macOS: `~/.omegat/plugins`
-
-Restart OmegaT. The **Grid View** tab appears at the bottom border of the
-main window.
-
-## Building from source
+## Building
 
 ```
 ./gradlew jar
 ```
 
-The JAR is produced in `build/libs/`. JDK 17+ is required to run the build
-(the plugin bytecode targets Java 11, matching OmegaT 6.0.x).
-
-## Known limitations
-
-- The in-grid cell editor is plain text: OmegaT tags in tag-heavy segments
-  must be maintained by hand (same rules as the editor pane, but without
-  tag colouring). Prefer the editor pane for heavily tagged segments.
-- When a row drops out of a filtered view, a neighbouring row may temporarily
-  inherit its wrapped height; heights normalize on the next filter, font or
-  wrap change.
-- The panel-specific font size adjustment is per-session (not persisted).
+Builds every plugin; each JAR lands in `<plugin>/build/libs/`. To build a
+single plugin: `./gradlew :grid-view:jar` or `./gradlew :reopen-last-project:jar`.
 
 ## License
 
@@ -66,49 +36,35 @@ GNU General Public License v3. See [COPYING](COPYING).
 
 ---
 
-# OmegaT Izgara Görünümü Eklentisi (Türkçe)
+# OmegaT Eklentileri (Türkçe)
 
-OmegaT için, memoQ/Trados'taki ızgara editörlerinden esinlenen, yerleştirilebilir
-iki sütunlu (kaynak | hedef) bir panel. Izgara, OmegaT editörüyle iki yönlü
-senkronize çalışır; hedef sütunu doğrudan düzenlenebilir — tüm değişiklikler
-OmegaT'nin kendi editör API'si üzerinden kaydedilir (çeviri belleği,
-istatistikler ve otomatik kayıt normal şekilde işler).
+Küçük [OmegaT](https://omegat.org) eklentilerinden oluşan bir koleksiyon.
+Her alt klasör bağımsız bir Gradle modülü olup kendi JAR'ını üretir —
+yalnızca istediğinizi kurabilirsiniz.
 
-## Özellikler
+## Eklentiler
 
-- Yerleştirilebilir **Grid View** paneli: segment no | kaynak | hedef | durum
-  (Çevrildi / Çevrilmedi / Aktif)
-- **Editörde açık belgeyi** gösterir, dosya geçişlerini otomatik izler;
-  dişli menüsünden tüm dosyaları birleşik gösterme seçeneği vardır
-- **Düzenlenebilir hedef sütunu** — hücreye çift tıkla, yaz, Enter'a bas
-- **Çift yönlü senkronizasyon**: satıra tıklayınca editör o segmente atlar;
-  editörde segment değişince ızgara aktif satırı seçip görünür alana kaydırır
-- **Arama kutusu ve filtre** (Tümü / Çevrilmemiş / Çevrilmiş); çeviri
-  yaptıkça satırlar filtreye göre canlı güncellenir
-- **Dişli menüsü**: satır kaydırma aç/kapa, yazı boyutu büyüt/küçült;
-  panel varsayılan olarak OmegaT'nin uygulama yazı tipini kullanır
-- Tembel (lazy) tablo modeli — on binlerce segmentli projelerde bile
-  segment kopyalamaz
-- İlk kurulumda panel alt kenarda küçültülmüş sekme olarak belirir;
-  istediğiniz yere sürükleyin, konum hatırlanır
+- **[grid-view](grid-view/)** — OmegaT editörüyle senkronize çalışan,
+  düzenlenebilir hedef sütunlu, arama/filtreli iki sütunlu ızgara görünümü.
+- **[reopen-last-project](reopen-last-project/)** — açılışta en son
+  kullanılan projeyi otomatik açar.
 
-## Kurulum
+Kurulum talimatları ve bilinen sınırlar için her alt klasörün kendi
+README dosyasına bakın.
 
-`omegat-gridview-plugin-<sürüm>.jar` dosyasını OmegaT eklenti klasörüne kopyalayın:
+## Gereksinimler
 
-- Windows: `%APPDATA%\OmegaT\plugins`
-- Linux / macOS: `~/.omegat/plugins`
+- OmegaT 6.0.x (6.0.1 üzerinde geliştirildi ve test edildi)
 
-OmegaT'yi yeniden başlatın; **Grid View** sekmesi ana pencerenin alt
-kenarında görünür.
+## Derleme
 
-## Bilinen sınırlar
+```
+./gradlew jar
+```
 
-- Hücre editörü düz metindir: etiket (tag) ağırlıklı segmentlerde etiketleri
-  elle korumanız gerekir; bu tür segmentler için editör paneli daha güvenlidir.
-- Filtreli görünümde satır düştüğünde komşu satır geçici olarak onun satır
-  yüksekliğini devralabilir; ilk filtre/yazı tipi değişikliğinde düzelir.
-- Panele özel yazı boyutu ayarı oturumluktur (kalıcı değildir).
+Tüm eklentileri derler; her JAR `<eklenti>/build/libs/` içinde oluşur.
+Tek bir eklentiyi derlemek için: `./gradlew :grid-view:jar` veya
+`./gradlew :reopen-last-project:jar`.
 
 ## Lisans
 

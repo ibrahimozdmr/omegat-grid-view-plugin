@@ -37,7 +37,8 @@ the OmegaT project.
 
 ## Installation
 
-Copy `omegat-gridview-plugin-<version>.jar` into your OmegaT plugins folder:
+Download `omegat-gridview-plugin-<version>.jar` from the
+[Releases](../../releases) page and copy it into your OmegaT plugins folder:
 
 - Windows: `%APPDATA%\OmegaT\plugins`
 - Linux / macOS: `~/.omegat/plugins`
@@ -53,6 +54,17 @@ main window.
 
 The JAR is produced in `build/libs/`. JDK 17+ is required to run the build
 (the plugin bytecode targets Java 11, the minimum for OmegaT 6.x).
+
+## Releasing
+
+1. Set the new `version` in `build.gradle.kts`.
+2. Add a `## <version>` section to `CHANGELOG.md`.
+3. Commit, then push a tag named `v<version>`, e.g. `git tag v1.0.2` and
+   `git push origin v1.0.2`.
+
+The Release workflow builds the JAR and publishes a GitHub release with it,
+using that CHANGELOG section as the release notes. It stops if the tag does
+not match the version in `build.gradle.kts`.
 
 ## Known limitations
 
@@ -106,7 +118,8 @@ yapılmamış veya onaylanmamıştır.
 
 ## Kurulum
 
-`omegat-gridview-plugin-<sürüm>.jar` dosyasını OmegaT eklenti klasörüne kopyalayın:
+`omegat-gridview-plugin-<sürüm>.jar` dosyasını [Releases](../../releases)
+sayfasından indirip OmegaT eklenti klasörüne kopyalayın:
 
 - Windows: `%APPDATA%\OmegaT\plugins`
 - Linux / macOS: `~/.omegat/plugins`

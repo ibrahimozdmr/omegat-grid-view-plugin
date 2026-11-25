@@ -42,11 +42,12 @@ class GridViewTableModel extends AbstractTableModel {
     static final int COL_TARGET = 2;
     static final int COL_STATUS = 3;
 
-    static final String STATUS_TRANSLATED = "Çevrildi";
-    static final String STATUS_UNTRANSLATED = "Çevrilmedi";
-    static final String STATUS_ACTIVE = "Aktif";
+    static final String STATUS_TRANSLATED = Messages.get("state.translated");
+    static final String STATUS_UNTRANSLATED = Messages.get("state.untranslated");
+    static final String STATUS_ACTIVE = Messages.get("state.active");
 
-    private static final String[] COLUMN_NAMES = {"No", "Kaynak", "Hedef", "Durum"};
+    private static final String[] COLUMN_NAMES = {Messages.get("column.number"),
+            Messages.get("column.source"), Messages.get("column.target"), Messages.get("column.status")};
 
     private List<SourceTextEntry> entries = Collections.emptyList();
     private int activeEntryNum = -1;
@@ -188,7 +189,7 @@ class GridViewTableModel extends AbstractTableModel {
         }
     }
 
-    /** Underlying translated state of a row (independent of the "Aktif" label). */
+    /** Underlying translated state of a row (independent of the active-segment label). */
     boolean isRowTranslated(int row) {
         TMXEntry info = getTranslationInfo(entries.get(row));
         return info != null && info.isTranslated();

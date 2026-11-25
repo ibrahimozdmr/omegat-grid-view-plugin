@@ -41,9 +41,6 @@ the text, and lets you fix a translation without leaving the table.
 - **Handles large projects.** Text is read from the project on demand, so
   projects with tens of thousands of segments stay fast.
 
-> **Note:** the panel's labels are currently in Turkish. English names are
-> given in brackets below.
-
 ## Installation
 
 1. **Download** `omegat-gridview-plugin-<version>.jar` from the
@@ -69,26 +66,33 @@ Java are the easiest choice.
 | --- | --- |
 | Click a row | The OmegaT editor jumps to that segment |
 | Move to another segment in the editor | The table highlights that row and scrolls to it |
-| Double-click a cell in **Hedef** (Target) | You can edit the translation |
+| Double-click a cell in **Target** | You can edit the translation |
 | Press **Enter** while editing | The translation is saved |
 | Press **Esc** while editing | Your change is discarded |
-| Type in **Ara:** (Search) | Rows are filtered by source, translation or segment number |
-| Pick **Tümü / Çevrilmemiş / Çevrilmiş** | Show all / untranslated / translated segments |
+| Type in **Search:** | Rows are filtered by source, translation or segment number |
+| Pick **All / Untranslated / Translated** | Show all / untranslated / translated segments |
 | Drag the panel's title bar | Dock the panel wherever you like |
 
-The **Durum** (Status) column shows **Çevrildi** (translated),
-**Çevrilmedi** (untranslated) or **Aktif** (the segment open in the editor).
+The **Status** column shows **Translated**, **Untranslated** or **Active**
+(the segment open in the editor).
 
 The **gear icon** in the panel's title bar has these options:
 
-- **Yalnızca açık dosyayı göster** (show only the open file): on by default.
-  Turn it off to see every file of the project in one table.
-- **Satır kaydırma** (word wrap)
-- **Yazı boyutunu büyüt / küçült / Varsayılan yazı boyutu**
-  (bigger / smaller / default text size)
+- **Show only the open file:** on by default. Turn it off to see every file
+  of the project in one table.
+- **Word wrap**
+- **Larger text / Smaller text / Default text size**
 
 If you reset the window layout with OmegaT's **Restore Main Window** command,
 the panel goes back to its tab at the bottom edge.
+
+## Language
+
+The panel uses the same language as OmegaT's menus: Turkish when OmegaT runs
+in Turkish, English for every other language. OmegaT takes its language from
+the system. On Windows you can change it by editing the `-Duser.language=`
+line in `OmegaT.l4J.ini` in the OmegaT folder (for example
+`-Duser.language=en`) and restarting OmegaT.
 
 ## Compatibility
 
@@ -227,6 +231,14 @@ Panelin başlık çubuğundaki **dişli simgesi** şu seçenekleri sunar:
 
 Pencere düzenini OmegaT'nin **Ana Pencereyi Eski Haline Getir** komutuyla
 sıfırlarsanız, panel alt kenardaki sekmesine geri döner.
+
+## Dil
+
+Panel, OmegaT'nin menüleriyle aynı dili kullanır: OmegaT Türkçe çalışıyorsa
+Türkçe, diğer bütün dillerde İngilizce. OmegaT dilini sistemden alır.
+Windows'ta değiştirmek için OmegaT klasöründeki `OmegaT.l4J.ini` dosyasında
+`-Duser.language=` satırını düzenleyin (örneğin `-Duser.language=tr`) ve
+OmegaT'yi yeniden başlatın.
 
 ## Uyumluluk
 

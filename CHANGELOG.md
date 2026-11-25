@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0 — 2026-11-25
+
+- The panel now speaks OmegaT's language: Turkish when OmegaT runs in
+  Turkish, English otherwise. Until now it was always in Turkish.
+
 ## 1.0.1 — 2026-11-24
 
 Tested on OmegaT 6.0.1 and 6.1.1.

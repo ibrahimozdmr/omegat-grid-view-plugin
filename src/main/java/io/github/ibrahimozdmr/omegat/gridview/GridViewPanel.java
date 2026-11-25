@@ -71,19 +71,21 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
 
     public static final String DOCK_KEY = "GRID_VIEW";
 
-    private static final String FILTER_ALL = "Tümü";
-    private static final String FILTER_UNTRANSLATED = "Çevrilmemiş";
-    private static final String FILTER_TRANSLATED = "Çevrilmiş";
+    // Positions in filterCombo; compared by index so the labels can be translated.
+    private static final int FILTER_ALL = 0;
+    private static final int FILTER_UNTRANSLATED = 1;
+    private static final int FILTER_TRANSLATED = 2;
 
     private final GridViewTableModel model = new GridViewTableModel();
     private final JTable table = new JTable(model);
     private final TableRowSorter<GridViewTableModel> sorter = new TableRowSorter<>(model);
     private final JLabel statusLabel = new JLabel(" ");
     private final JTextField cellEditorField = new JTextField();
-    private final JLabel searchLabel = new JLabel("Ara:");
+    private final JLabel searchLabel = new JLabel(Messages.get("search.label"));
     private final JTextField searchField = new JTextField();
     private final JComboBox<String> filterCombo =
-            new JComboBox<>(new String[] {FILTER_ALL, FILTER_UNTRANSLATED, FILTER_TRANSLATED});
+            new JComboBox<>(new String[] {Messages.get("filter.all"),
+                Messages.get("filter.untranslated"), Messages.get("filter.translated")});
 
     /** True while the table selection is being updated from an editor event,
      * to keep the selection listener from calling gotoEntry back. */
@@ -256,32 +258,32 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
     @Override
     public void populatePaneMenu(JPopupMenu menu) {
         JCheckBoxMenuItem currentFileItem =
-                new JCheckBoxMenuItem("Yalnızca açık dosyayı göster", showCurrentFileOnly);
+                new JCheckBoxMenuItem(Messages.get("menu.currentFileOnly"), showCurrentFileOnly);
         currentFileItem.addActionListener(e -> {
             showCurrentFileOnly = currentFileItem.isSelected();
             populateFromProject();
         });
         menu.add(currentFileItem);
-        JCheckBoxMenuItem wrapItem = new JCheckBoxMenuItem("Satır kaydırma", wrapEnabled);
+        JCheckBoxMenuItem wrapItem = new JCheckBoxMenuItem(Messages.get("menu.wordWrap"), wrapEnabled);
         wrapItem.addActionListener(e -> {
             wrapEnabled = wrapItem.isSelected();
             applyFont();
         });
         menu.add(wrapItem);
         menu.addSeparator();
-        JMenuItem bigger = new JMenuItem("Yazı boyutunu büyüt");
+        JMenuItem bigger = new JMenuItem(Messages.get("menu.fontBigger"));
         bigger.addActionListener(e -> {
             fontSizeDelta++;
             applyFont();
         });
         menu.add(bigger);
-        JMenuItem smaller = new JMenuItem("Yazı boyutunu küçült");
+        JMenuItem smaller = new JMenuItem(Messages.get("menu.fontSmaller"));
         smaller.addActionListener(e -> {
             fontSizeDelta--;
             applyFont();
         });
         menu.add(smaller);
-        JMenuItem reset = new JMenuItem("Varsayılan yazı boyutu");
+        JMenuItem reset = new JMenuItem(Messages.get("menu.fontDefault"));
         reset.addActionListener(e -> {
             fontSizeDelta = 0;
             applyFont();
@@ -309,18 +311,18 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
      * and go stale when rows shift, so they are reset here too. */
     private void updateFilter() {
         String query = searchField.getText().trim();
-        String statusChoice = (String) filterCombo.getSelectedItem();
-        if (query.isEmpty() && FILTER_ALL.equals(statusChoice)) {
+        int statusChoice = filterCombo.getSelectedIndex();
+        if (query.isEmpty() && statusChoice == FILTER_ALL) {
             sorter.setRowFilter(null);
         } else {
             sorter.setRowFilter(new RowFilter<GridViewTableModel, Integer>() {
                 @Override
                 public boolean include(Entry<? extends GridViewTableModel, ? extends Integer> entry) {
                     int row = entry.getIdentifier();
-                    if (FILTER_UNTRANSLATED.equals(statusChoice) && model.isRowTranslated(row)) {
+                    if (statusChoice == FILTER_UNTRANSLATED && model.isRowTranslated(row)) {
                         return false;
                     }
-                    if (FILTER_TRANSLATED.equals(statusChoice) && !model.isRowTranslated(row)) {
+                    if (statusChoice == FILTER_TRANSLATED && !model.isRowTranslated(row)) {
                         return false;
                     }
                     if (query.isEmpty()) {
@@ -439,16 +441,15 @@ public class GridViewPanel extends DockablePanel implements IPaneMenu {
             return;
         }
         String counts = table.getRowCount() < model.getRowCount()
-                ? table.getRowCount() + " / " + model.getRowCount() + " segment"
-                : model.getRowCount() + " segment";
+                ? Messages.format("status.segmentsFiltered", table.getRowCount(), model.getRowCount())
+                : Messages.format("status.segments", model.getRowCount());
         String filePrefix = showCurrentFileOnly && currentFilePath != null
                 ? currentFilePath + " — " : "";
-        statusLabel.setText(filePrefix + counts
-                + " — Hedef hücresini çift tıklayıp düzenleyebilirsiniz; Enter kaydeder.");
+        statusLabel.setText(filePrefix + counts + " — " + Messages.get("status.hint"));
     }
 
     private void showNoProjectStatus() {
-        statusLabel.setText("Proje açık değil.");
+        statusLabel.setText(Messages.get("status.noProject"));
     }
 
     /**

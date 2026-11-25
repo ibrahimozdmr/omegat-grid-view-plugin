@@ -4,7 +4,7 @@ plugins {
     id("org.omegat.gradle") version "1.5.11"
 }
 
-version = "1.0.1"
+version = "1.1.0"
 
 omegat {
     // Latest OmegaT artifact published to Maven Central; the plugin is tested at runtime on 6.0.1 and 6.1.1.

@@ -9,7 +9,7 @@ version = "1.0.1"
 omegat {
     // Latest OmegaT artifact published to Maven Central; the plugin is tested at runtime on 6.0.1 and 6.1.1.
     version = "6.0.0"
-    pluginClass = "org.omegat.plugins.gridview.GridViewPlugin"
+    pluginClass = "io.github.ibrahimozdmr.omegat.gridview.GridViewPlugin"
 }
 
 java {

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package org.omegat.plugins.gridview;
+package io.github.ibrahimozdmr.omegat.gridview;
 
 import org.omegat.core.Core;
 import org.omegat.core.data.IProject;

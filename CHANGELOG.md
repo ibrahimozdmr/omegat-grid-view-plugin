@@ -12,6 +12,9 @@ Tested on OmegaT 6.0.1 and 6.1.1.
 - On first install with OmegaT 6.1 the panel no longer appears docked in
   the middle of the window; it starts as the bottom auto-hide tab.
 - Plugin author shown in OmegaT's plugin list is now `ibrahimozdmr`.
+- The plugin's Java package moved from `org.omegat.plugins.gridview` to
+  `io.github.ibrahimozdmr.omegat.gridview`, since `org.omegat` belongs to
+  the OmegaT project. Saved window layouts and settings are not affected.
 
 ## 1.0.0 — 2026-07-07
 

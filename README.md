@@ -8,6 +8,8 @@ translation on the right, right inside [OmegaT](https://omegat.org).**
 [Installation](#installation) · [Using the grid](#using-the-grid) ·
 [Changelog](CHANGELOG.md) · [Türkçe](#türkçe)
 
+![Grid View docked below the OmegaT editor. Segment 8 is open in the editor and highlighted in the grid.](docs/screenshot.png)
+
 ---
 
 OmegaT's editor shows your text as one long flow of segments. That is great for

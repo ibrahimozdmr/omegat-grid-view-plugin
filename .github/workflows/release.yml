@@ -34,13 +34,20 @@ jobs:
       - name: Build plugin JAR
         run: ./gradlew jar
 
+      # CHANGELOG.md is wrapped for reading as a file, but GitHub release
+      # notes keep every line break, so each item is joined onto one line.
       - name: Take release notes from CHANGELOG.md
         run: |
           awk -v v="$VERSION" '
             index($0, "## " v " ") == 1 || $0 == "## " v { found = 1; next }
             found && /^## / { exit }
             found { print }
-          ' CHANGELOG.md > release-notes.md
+          ' CHANGELOG.md | awk '
+            /^[[:space:]]*$/ { if (buf != "") print buf; buf = ""; print ""; next }
+            /^- / { if (buf != "") print buf; buf = $0; next }
+            { sub(/^[[:space:]]+/, ""); buf = (buf == "" ? $0 : buf " " $0) }
+            END { if (buf != "") print buf }
+          ' > release-notes.md
           if ! grep -q '[^[:space:]]' release-notes.md; then
             echo "::error::CHANGELOG.md has no section for $VERSION"
             exit 1

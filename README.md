@@ -38,7 +38,8 @@ the OmegaT project.
 ## Installation
 
 Download `omegat-gridview-plugin-<version>.jar` from the
-[Releases](../../releases) page and copy it into your OmegaT plugins folder:
+[latest release](https://github.com/ibrahimozdmr/omegat-grid-view-plugin/releases/latest)
+and copy it into your OmegaT plugins folder:
 
 - Windows: `%APPDATA%\OmegaT\plugins`
 - Linux / macOS: `~/.omegat/plugins`
@@ -118,7 +119,8 @@ yapılmamış veya onaylanmamıştır.
 
 ## Kurulum
 
-`omegat-gridview-plugin-<sürüm>.jar` dosyasını [Releases](../../releases)
+`omegat-gridview-plugin-<sürüm>.jar` dosyasını
+[son sürüm](https://github.com/ibrahimozdmr/omegat-grid-view-plugin/releases/latest)
 sayfasından indirip OmegaT eklenti klasörüne kopyalayın:
 
 - Windows: `%APPDATA%\OmegaT\plugins`

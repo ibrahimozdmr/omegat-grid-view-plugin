@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.1 — 2026-11-24
+
+Tested on OmegaT 6.0.1 and 6.1.1.
+
+- Fixed: with OmegaT 6.1 the saved window layout could fail to load on the
+  second start ("y is out of bounds"), leaving panels in the wrong places.
+  The bottom auto-hide tab now always saves a valid position.
+- Fixed: "Restore Main Window" removed the Grid View panel until OmegaT was
+  restarted; it now goes back to the bottom auto-hide tab right away.
+- On first install with OmegaT 6.1 the panel no longer appears docked in
+  the middle of the window; it starts as the bottom auto-hide tab.
+- Plugin author shown in OmegaT's plugin list is now `ibrahimozdmr`.
+
 ## 1.0.0 — 2026-07-07
 
 First release. Developed against OmegaT 6.0.0 API, tested on OmegaT 6.0.1.

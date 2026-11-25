@@ -21,14 +21,19 @@ import org.omegat.core.CoreEvents;
 import org.omegat.core.events.IApplicationEventListener;
 import org.omegat.gui.main.IMainWindow;
 import org.omegat.util.Log;
-import org.omegat.util.StaticUtils;
 
+import com.vlsolutions.swing.docking.AutoHideButtonPanel;
 import com.vlsolutions.swing.docking.DockableState;
+import com.vlsolutions.swing.docking.DockingDesktop;
 import com.vlsolutions.swing.docking.RelativeDockablePosition;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
+import java.awt.event.HierarchyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.SwingUtilities;
 
 /**
@@ -37,13 +42,24 @@ import javax.swing.SwingUtilities;
  * The dockable panel is created in onApplicationStartup, because the main
  * window does not exist yet when loadPlugins() is called.
  *
- * Plugin listeners fire before MainWindow's own startup listener, which
- * restores the saved desktop layout (uiLayout.xml) and would wipe a panel
- * added directly here. So: register the dockable synchronously (letting a
- * saved layout restore its position), then after the layout restore has run
- * (via invokeLater) add the panel to the desktop if it is still not visible.
+ * Placement: a saved layout (uiLayout.xml) that contains the panel restores
+ * it wherever the user left it. Otherwise (first install, or after "Restore
+ * Main Window") the panel goes to the bottom border as a collapsed auto-hide
+ * tab, next to Dictionary/Machine Translation.
+ *
+ * OmegaT's own startup and reset code calls UIDesignManager.ensureDockablesVisible,
+ * which docks every registered-but-closed dockable at a default spot: an
+ * invisible zero-width split in OmegaT 6.0, the middle of the window in 6.1.
+ * That force-dock is vetoed for this panel and replaced by the auto-hide tab.
+ * Undoing it afterwards with setAutoHide is not an option: setAutoHide derives
+ * the "restore to" position from the panel's geometry, which is not laid out
+ * yet at that point, and saves an out-of-range value (e.g. y=-0.625) that
+ * VLDocking 3.1 (OmegaT 6.1) refuses to read back, breaking the whole layout
+ * restore on the next start.
  */
 public final class GridViewPlugin {
+
+    private static volatile boolean shuttingDown;
 
     private GridViewPlugin() {
     }
@@ -53,35 +69,48 @@ public final class GridViewPlugin {
             @Override
             public void onApplicationStartup() {
                 IMainWindow mainWindow = Core.getMainWindow();
+                DockingDesktop desktop = mainWindow.getDesktop();
                 GridViewPanel panel = new GridViewPanel();
-                // Checked BEFORE MainWindow restores the saved layout (its
-                // startup listener runs after this one): if the saved layout
-                // does not mention our panel, any docked state seen later was
-                // forced by OmegaT's ensureDockablesVisible (which docks every
-                // registered-but-closed dockable into a zero-width split), not
-                // chosen by the user.
-                boolean inSavedLayout = savedLayoutMentionsPanel();
-                mainWindow.getDesktop().registerDockable(panel);
-                SwingUtilities.invokeLater(() -> {
-                    DockableState state = mainWindow.getDesktop().getDockableState(panel);
-                    try {
-                        if (state == null || state.isClosed()) {
-                            // Start as a collapsed auto-hide tab at the bottom
-                            // border, next to Dictionary/Machine Translation.
-                            mainWindow.getDesktop().addHiddenDockable(panel,
-                                    RelativeDockablePosition.BOTTOM);
-                        } else if (!inSavedLayout && state.isDocked()) {
-                            // Undo the invisible zero-width force-dock.
-                            mainWindow.getDesktop().setAutoHide(panel, true);
-                        }
-                    } catch (RuntimeException ex) {
-                        Log.log(ex);
+                // Registered here so that MainWindow's own startup listener,
+                // which runs after this one, can restore a saved position.
+                desktop.registerDockable(panel);
+                desktop.addDockableStateWillChangeListener(e -> {
+                    DockableState current = e.getCurrentState();
+                    DockableState future = e.getFutureState();
+                    if (future != null && future.getDockable() == panel && future.isDocked()
+                            && (current == null || current.isClosed()) && isForceDock()) {
+                        e.cancel();
+                        SwingUtilities.invokeLater(() -> addToBottomBorderIfMissing(desktop, panel));
                     }
                 });
+                // Runs after the layout restore, which happens later in the
+                // same startup event.
+                SwingUtilities.invokeLater(() -> addToBottomBorderIfMissing(desktop, panel));
+                // "Restore Main Window" (and per-project layouts) reload the
+                // layout with readXML, which silently drops every dockable the
+                // loaded layout does not mention: no state event is fired. The
+                // only trace is our component, or our auto-hide button, being
+                // removed from its container; re-check after either.
+                panel.addHierarchyListener(e -> {
+                    if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0
+                            && panel.getParent() == null) {
+                        SwingUtilities.invokeLater(() -> addToBottomBorderIfMissing(desktop, panel));
+                    }
+                });
+                ContainerAdapter buttonRemoved = new ContainerAdapter() {
+                    @Override
+                    public void componentRemoved(ContainerEvent e) {
+                        SwingUtilities.invokeLater(() -> addToBottomBorderIfMissing(desktop, panel));
+                    }
+                };
+                for (AutoHideButtonPanel border : findBorderPanels(desktop)) {
+                    border.addContainerListener(buttonRemoved);
+                }
             }
 
             @Override
             public void onApplicationShutdown() {
+                shuttingDown = true;
             }
         });
     }
@@ -89,15 +118,51 @@ public final class GridViewPlugin {
     public static void unloadPlugins() {
     }
 
-    private static boolean savedLayoutMentionsPanel() {
+    /** The desktop's auto-hide button bars (one per border). */
+    private static List<AutoHideButtonPanel> findBorderPanels(Container root) {
+        List<AutoHideButtonPanel> found = new ArrayList<>();
+        for (Component child : root.getComponents()) {
+            if (child instanceof AutoHideButtonPanel) {
+                found.add((AutoHideButtonPanel) child);
+            } else if (child instanceof Container) {
+                found.addAll(findBorderPanels((Container) child));
+            }
+        }
+        return found;
+    }
+
+    /** True if the dock request comes from OmegaT's ensureDockablesVisible. */
+    private static boolean isForceDock() {
+        for (StackTraceElement frame : new Throwable().getStackTrace()) {
+            if ("ensureDockablesVisible".equals(frame.getMethodName())
+                    && frame.getClassName().startsWith("org.omegat.")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds the panel as a collapsed auto-hide tab at the bottom border unless
+     * it is already on the desktop (docked, floating, maximized or
+     * auto-hidden). The explicit BOTTOM position is what gets saved, so the
+     * layout file stays valid.
+     */
+    private static void addToBottomBorderIfMissing(DockingDesktop desktop, GridViewPanel panel) {
+        if (shuttingDown) {
+            return;
+        }
         try {
-            File layout = new File(StaticUtils.getConfigDir(), "uiLayout.xml");
-            return layout.isFile() && new String(Files.readAllBytes(layout.toPath()),
-                    StandardCharsets.UTF_8).contains(GridViewPanel.DOCK_KEY);
-        } catch (Exception ex) {
+            DockableState state = desktop.getDockableState(panel);
+            if (state == null) {
+                desktop.registerDockable(panel);
+                state = desktop.getDockableState(panel);
+            }
+            if (state == null || state.isClosed()) {
+                desktop.addHiddenDockable(panel, RelativeDockablePosition.BOTTOM);
+            }
+        } catch (RuntimeException ex) {
             Log.log(ex);
-            // When unsure, assume the user has a layout and leave it alone.
-            return true;
         }
     }
 }

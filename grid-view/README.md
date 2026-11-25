@@ -29,7 +29,8 @@ statistics and autosave behave exactly as if you had typed in the editor pane.
 
 ## Requirements
 
-- OmegaT 6.0.x (developed and tested on 6.0.1)
+- OmegaT 6.0 or 6.1 (tested on 6.0.1 and 6.1.1).
+  Earlier versions have not been tested.
 
 ## Installation
 
@@ -48,7 +49,7 @@ main window.
 ```
 
 The JAR is produced in `build/libs/`. JDK 17+ is required to run the build
-(the plugin bytecode targets Java 11, matching OmegaT 6.0.x).
+(the plugin bytecode targets Java 11, the minimum for OmegaT 6.x).
 
 ## Known limitations
 
@@ -91,6 +92,11 @@ istatistikler ve otomatik kayıt normal şekilde işler).
   segment kopyalamaz
 - İlk kurulumda panel alt kenarda küçültülmüş sekme olarak belirir;
   istediğiniz yere sürükleyin, konum hatırlanır
+
+## Gereksinimler
+
+- OmegaT 6.0 veya 6.1 (6.0.1 ve 6.1.1 üzerinde test edildi).
+  Daha eski sürümler test edilmedi.
 
 ## Kurulum
 

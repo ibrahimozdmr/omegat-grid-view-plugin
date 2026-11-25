@@ -4,10 +4,10 @@ plugins {
     id("org.omegat.gradle") version "1.5.11"
 }
 
-version = "1.0.0"
+version = "1.0.1"
 
 omegat {
-    // Latest OmegaT artifact published to Maven Central; runtime target is 6.0.1 (API-compatible patch release).
+    // Latest OmegaT artifact published to Maven Central; the plugin is tested at runtime on 6.0.1 and 6.1.1.
     version = "6.0.0"
     pluginClass = "org.omegat.plugins.gridview.GridViewPlugin"
 }

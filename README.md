@@ -19,7 +19,7 @@ known limitations.
 
 ## Requirements
 
-- OmegaT 6.0.x (developed and tested on 6.0.1)
+- OmegaT 6.0 or later. Tested versions are listed in each plugin's README.
 
 ## Building
 
@@ -54,7 +54,7 @@ README dosyasına bakın.
 
 ## Gereksinimler
 
-- OmegaT 6.0.x (6.0.1 üzerinde geliştirildi ve test edildi)
+- OmegaT 6.0 veya üstü. Test edilen sürümler her eklentinin kendi README dosyasında yazar.
 
 ## Derleme
 

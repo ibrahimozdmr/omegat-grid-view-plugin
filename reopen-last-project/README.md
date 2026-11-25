@@ -18,7 +18,7 @@ if no project was specified on the command line and none is already open.
 
 ## Requirements
 
-- OmegaT 6.0.x (developed and tested on 6.0.1)
+- OmegaT 6.0.x (developed against 6.0.1; not yet tested in daily use)
 
 ## Installation
 

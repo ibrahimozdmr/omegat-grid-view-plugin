@@ -8,7 +8,10 @@ translation on the right, right inside [OmegaT](https://omegat.org).**
 [Installation](#installation) · [Using the grid](#using-the-grid) ·
 [Changelog](CHANGELOG.md) · [Türkçe](#türkçe)
 
-![Grid View docked below the OmegaT editor. Segment 8 is open in the editor and highlighted in the grid.](docs/screenshot.png)
+<p align="center">
+  <a href="docs/screenshot.png"><img src="docs/screenshot.png" width="640"
+    alt="Grid View docked below the OmegaT editor. Segment 8 is open in the editor and highlighted in the grid."></a>
+</p>
 
 ---
 

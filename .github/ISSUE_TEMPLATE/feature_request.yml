@@ -1,0 +1,21 @@
+name: Feature request
+description: Suggest an idea for Grid View
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would you like to do?
+      description: Describe the task or the problem, for example "When I review a file I want to ...".
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: How could Grid View help?
+      description: The change you have in mind. If another CAT tool does this well, tell us which one and how.
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
+      description: Optional. Screenshots, examples, or other details.

@@ -1,0 +1,65 @@
+name: Bug report
+description: Something in Grid View does not work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you see, and what did you expect to see instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open a project
+        2. Double-click a cell in the Target column
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Grid View version
+      description: Shown in OmegaT under Options > Preferences > Plugins, or in the JAR file name.
+      placeholder: e.g. 1.1.0
+    validations:
+      required: true
+  - type: input
+    id: omegat-version
+    attributes:
+      label: OmegaT version
+      description: Shown in the OmegaT window title and under Help > About.
+      placeholder: e.g. 6.1.1
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+  - type: input
+    id: ui-language
+    attributes:
+      label: OmegaT interface language
+      placeholder: e.g. English, Turkish
+  - type: textarea
+    id: log
+    attributes:
+      label: OmegaT log
+      description: >
+        If OmegaT showed an error, open Options > Access Configuration Folder,
+        go to the logs folder and paste the relevant part of the newest log file.
+      render: text
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Optional. You can drag images into this field.

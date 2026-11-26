@@ -50,14 +50,16 @@ the text, and lets you fix a translation without leaving the table.
 
 1. **Download** `omegat-gridview-plugin-<version>.jar` from the
    [latest release](https://github.com/ibrahimozdmr/omegat-grid-view-plugin/releases/latest).
-2. **Close OmegaT.**
-3. **Copy the JAR** into your OmegaT plugins folder. If the `plugins` folder
-   does not exist yet, create it.
-   - Windows: `%APPDATA%\OmegaT\plugins` (paste this into the File Explorer
-     address bar)
-   - Linux / macOS: `~/.omegat/plugins`
-
-   If an older version of the plugin is in that folder, delete it.
+2. **Find the plugins folder.** In OmegaT, choose
+   **Options > Access Configuration Folder** and open the `plugins` folder
+   inside it. If there is no `plugins` folder yet, create it. The folder is
+   here:
+   - Windows: `%APPDATA%\OmegaT\plugins` (you can paste this into the File
+     Explorer address bar)
+   - macOS: `~/Library/Preferences/OmegaT/plugins`
+   - Linux: `~/.omegat/plugins`
+3. **Close OmegaT** and **copy the JAR** into the `plugins` folder. If an
+   older version of the plugin is there, delete it.
 4. **Start OmegaT.** A **Grid View** tab appears at the bottom edge of the
    window. Click it to open the panel.
 
@@ -196,14 +198,16 @@ sağlar.
 1. `omegat-gridview-plugin-<sürüm>.jar` dosyasını
    [son sürüm](https://github.com/ibrahimozdmr/omegat-grid-view-plugin/releases/latest)
    sayfasından **indirin**.
-2. **OmegaT'yi kapatın.**
-3. **JAR dosyasını** OmegaT eklenti klasörüne **kopyalayın**. `plugins`
-   klasörü yoksa oluşturun.
+2. **Eklenti klasörünü bulun.** OmegaT'de
+   **Seçenekler > Yapılandırma Klasörüne Eriş** komutunu seçin ve açılan
+   klasördeki `plugins` klasörüne girin. `plugins` klasörü yoksa oluşturun.
+   Klasörün yeri:
    - Windows: `%APPDATA%\OmegaT\plugins` (Dosya Gezgini'nin adres çubuğuna
-     yapıştırın)
-   - Linux / macOS: `~/.omegat/plugins`
-
-   Klasörde eklentinin eski bir sürümü varsa silin.
+     yapıştırabilirsiniz)
+   - macOS: `~/Library/Preferences/OmegaT/plugins`
+   - Linux: `~/.omegat/plugins`
+3. **OmegaT'yi kapatın** ve **JAR dosyasını** `plugins` klasörüne
+   **kopyalayın**. Eklentinin eski bir sürümü varsa silin.
 4. **OmegaT'yi açın.** Pencerenin alt kenarında **Grid View** sekmesi belirir.
    Paneli açmak için tıklayın.
 
